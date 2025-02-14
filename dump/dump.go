@@ -1,6 +1,10 @@
-package main
+package dump
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/eugen-bondarev/backup-tool/config"
+)
 
 type Dump struct {
 	database   string
@@ -14,25 +18,25 @@ func NewDump(database, outputFile string) *Dump {
 	}
 }
 
-type DBType int
+type DBType string
 
 const (
-	MySQL DBType = iota
-	Postgres
+	MySQL DBType = "mysql"
+	PG    DBType = "pg"
 )
 
-func (d Dump) Create(c Config, dbType DBType) error {
-	var config getDumpCommand
+func (d Dump) Create(c config.Config, dbType DBType) error {
+	var config GetDumpCommand
 
 	switch dbType {
 	case MySQL:
 		config = c.MySQL
-	case Postgres:
-		config = c.Postgres
+	case PG:
+		config = c.PG
 	default:
 		return fmt.Errorf("invalid database type: %v", dbType)
 	}
 
-	command := config.getCommand(d.database, d.outputFile)
+	command := config.GetCommand(d.database, d.outputFile)
 	return executeCommand(command)
 }

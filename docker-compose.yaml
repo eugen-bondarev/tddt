@@ -1,24 +1,35 @@
 services:
-  db:
+  mysql:
     image: mysql/mysql-server:8.0
     ports:
-      - "${FORWARD_DB_PORT:-3306}:3306"
+      - 3306:3306
     environment:
-      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: root
       MYSQL_ROOT_HOST: "%"
-      MYSQL_DATABASE: "${DB_DATABASE}"
-      MYSQL_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_DATABASE: test
+      MYSQL_PASSWORD: test
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
     volumes:
-      - "mysql_data:/var/lib/mysql"
+      - mysql_data:/var/lib/mysql
     healthcheck:
       test:
         - CMD
         - mysqladmin
         - ping
-        - "-p${DB_PASSWORD}"
+        - "-p"
+        - "test"
       retries: 3
       timeout: 5s
+
+  pg:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+    ports:
+      - 5432:5432
+    volumes:
+      - pg_data:/var/lib/postgresql/data
 
   adminer:
     image: adminer
@@ -27,4 +38,4 @@ services:
 
 volumes:
   mysql_data:
-  redis_data:
+  pg_data:

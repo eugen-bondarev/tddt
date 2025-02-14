@@ -2,29 +2,70 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"path/filepath"
 
-	"github.com/caarlos0/env/v11"
+	"github.com/eugen-bondarev/backup-tool/config"
+	"github.com/eugen-bondarev/backup-tool/dump"
+	"github.com/eugen-bondarev/backup-tool/router"
+	"github.com/eugen-bondarev/backup-tool/storage"
 	"github.com/eugen-bondarev/backup-tool/util"
-	"github.com/joho/godotenv"
+	"github.com/gin-gonic/gin"
 )
 
-const (
-	tmpDir = "tmp"
-)
+type DumpConfig struct {
+	Database string `json:"database"`
+	Type     string `json:"type"`
+}
+
+type OutputConfig struct {
+	Bucket string `json:"bucket"`
+	Path   string `json:"path"`
+}
+
+type BackupRequest struct {
+	Dump   DumpConfig   `json:"dump"`
+	Output OutputConfig `json:"output"`
+}
+
+type BackupResponse struct {
+	Message string `json:"message"`
+}
 
 func main() {
-	if _, err := os.Stat(tmpDir); os.IsNotExist(err) {
-		os.MkdirAll(tmpDir, 0755)
-	}
+	util.EnsureTmpDir()
 
-	godotenv.Load()
-	cfg, err := env.ParseAs[Config]()
-	util.CheckErr(err)
-	fmt.Println(cfg)
+	cfg := util.LoadEnv[config.Config]()
 
-	d := NewDump("test", filepath.Join(tmpDir, "dump.sql"))
-	err = d.Create(cfg, MySQL)
+	s, err := storage.NewGCPStorage(cfg.GCPConfig)
 	util.CheckErr(err)
+
+	r := gin.Default()
+
+	r.POST("/", router.GinWrap(func(ctx router.Ctx) (any, error) {
+		var req BackupRequest
+		err := ctx.GetBody(&req)
+		if err != nil {
+			return nil, router.NewHttpError(err.Error(), 400)
+		}
+
+		tmpInPath := util.CreateTmpSqlFilePath()
+
+		d := dump.NewDump(req.Dump.Database, tmpInPath)
+		err = d.Create(cfg, dump.DBType(req.Dump.Type))
+		if err != nil {
+			return nil, router.NewHttpError(err.Error(), 500)
+		}
+
+		outPath := fmt.Sprintf("%s/%s", req.Output.Bucket, req.Output.Path)
+
+		err = s.Push(tmpInPath, outPath)
+		if err != nil {
+			return nil, router.NewHttpError(err.Error(), 500)
+		}
+
+		return BackupResponse{
+			Message: "success",
+		}, nil
+	}))
+
+	r.Run(fmt.Sprintf(":%d", cfg.Port))
 }
