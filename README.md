@@ -73,17 +73,17 @@ curl -X POST http://admin:password@localhost:8080/v1/dump \
 
 ### Other request examples
 
-```json
+```json5
 {
-  "dump": {
-    "database": "test",
-    "type": "mysql"
+  dump: {
+    database: "test",
+    type: "mysql",
   },
-  "output": {
-    "bucket": "my-nice-gcp-bucket-123",
-    "path": "1.sql"
+  output: {
+    bucket: "my-nice-gcp-bucket-123",
+    path: "1.sql",
   },
-  "async": true // optional, default is false. This will immediately return and create a dump in the background
+  async: true, // optional, default is false. This will immediately return and create a dump in the background
 }
 ```
 
