@@ -22,7 +22,9 @@ cp .env.example .env
 docker run -p 8080:8080 --env-file .env eugbondarev/tddt:1.0.0
 ```
 
-3. Create a dump
+## Usage
+
+Create a dump
 
 ```bash
 curl -X POST http://admin:password@localhost:8080/v1/dump \
