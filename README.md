@@ -16,6 +16,29 @@ This section describes how to start the service in Docker. You can derive other 
 cp .env.example .env
 ```
 
+2. Run the container
+
+```bash
+docker run -p 8080:8080 --env-file .env eugbondarev/tdbt:1.0.0
+```
+
+3. Create a dump
+
+```bash
+curl -X POST http://admin:password@localhost:8080/v1/dump \
+    -H "Content-Type: application/json" \
+    -d '{
+        "dump": {
+            "database": "test",
+            "type": "pg"
+        },
+        "output": {
+            "bucket": "my-nice-gcp-bucket-123",
+            "path": "pg/1.sql"
+        }
+    }'
+```
+
 ## Requirements
 
 - mysqldump
