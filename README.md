@@ -6,6 +6,11 @@ I wanted a simple Docker-first tool that works anywhere, follows cloud native pr
 
 `tddt` gives you **one** endpoint to create a dump of your database (mysql, postgres, more in the future) and upload it to the cloud storage of your choice (for now only GCP, more in the future).
 
+## What `tddt` is not
+
+- `tddt` is not a CLI tool
+- `tddt` doesn't take care of any scheduling. It's up to you to schedule backups and call the endpoint of `tddt`, e.g. using cron
+
 ## TL;DR
 
 1. Call the endpoint with a JSON body to create a dump
