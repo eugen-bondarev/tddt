@@ -14,7 +14,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            eugbondarev/tdbt
+            ${{ vars.DOCKERHUB_USERNAME }}/tddt
           tags: |
             type=ref,event=branch
             type=semver,pattern={{version}}

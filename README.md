@@ -1,10 +1,10 @@
-# tdbt - tiny database dump tool
+# tddt - tiny database dump tool
 
 ## Motivation
 
 I wanted a simple Docker-first tool that works anywhere, follows cloud native principles and is easy to deploy.
 
-`tdbt` gives you **one** endpoint to create a dump of your database (mysql, postgres, more in the future) and upload it to the cloud storage of your choice (for now only GCP, more in the future).
+`tddt` gives you **one** endpoint to create a dump of your database (mysql, postgres, more in the future) and upload it to the cloud storage of your choice (for now only GCP, more in the future).
 
 ## Deployment
 
@@ -19,7 +19,7 @@ cp .env.example .env
 2. Run the container
 
 ```bash
-docker run -p 8080:8080 --env-file .env eugbondarev/tdbt:1.0.0
+docker run -p 8080:8080 --env-file .env eugbondarev/tddt:1.0.0
 ```
 
 3. Create a dump
