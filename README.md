@@ -39,7 +39,9 @@ This section describes how to start the service in Docker. You can derive other 
 cp .env.example .env
 ```
 
-2. Run the container
+2. Fill in the variables. Make sure your `GOOGLE_CLOUD_CREDENTIALS` is set properly. It should be a Base64 encoded string of your JSON credentials.
+
+3. Run the container
 
 ```bash
 docker run -p 8080:8080 --env-file .env eugbondarev/tddt:1.0.0
