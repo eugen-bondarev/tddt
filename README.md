@@ -6,6 +6,29 @@ I wanted a simple Docker-first tool that works anywhere, follows cloud native pr
 
 `tddt` gives you **one** endpoint to create a dump of your database (mysql, postgres, more in the future) and upload it to the cloud storage of your choice (for now only GCP, more in the future).
 
+## TL;DR
+
+1. Call the endpoint with a JSON body to create a dump
+
+```bash
+curl -X POST http://admin:password@localhost:8080/v1/dump \
+    -H "Content-Type: application/json" \
+    -d '{
+        "dump": {
+            "database": "test",
+            "type": "pg"
+        },
+        "output": {
+            "bucket": "my-nice-gcp-bucket-123",
+            "path": "pg/1.sql"
+        }
+    }'
+```
+
+2. Enjoy your dump
+
+![image](./docs/images/1.png)
+
 ## Deployment
 
 This section describes how to start the service in Docker. You can derive other deployment methods (e.g. kubernetes) from this.
@@ -56,7 +79,7 @@ curl -X POST http://admin:password@localhost:8080/v1/dump \
 - [ ] Better logging
 - [ ] More flexibility through env variables
 - [ ] Add tests
-- [ ] Many Docker images, only with required stuff (e.g. no mysql if you only need postgres)
+- [ ] Many Docker images, only with required stuff (e.g. no mysql if you only need postgres, etc.)
 
 > [!NOTE]  
 > It's only v1, the API might change in the future
