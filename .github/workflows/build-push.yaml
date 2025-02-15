@@ -2,10 +2,10 @@ name: ci
 
 on:
   push:
-    branches: main
+    tags: '*'
 
 jobs:
-  login:
+  build-push:
     runs-on: ubuntu-latest
     steps:
       - name: Login to Docker Hub
@@ -21,4 +21,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: eugbondarev/tdbt:latest
+          tags:
+            - eugbondarev/tdbt:latest
+            - eugbondarev/tdbt:${{ github.ref_name }}
