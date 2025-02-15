@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/eugen-bondarev/backup-tool/config"
 	"github.com/eugen-bondarev/backup-tool/dump"
@@ -61,6 +62,7 @@ func (a *App) dump(dumpCfg DumpConfig, outputCfg OutputConfig) (any, error) {
 	outPath := fmt.Sprintf("%s/%s", outputCfg.Bucket, outputCfg.Path)
 
 	err = a.storage.Push(tmpInPath, outPath)
+	defer os.Remove(tmpInPath)
 	if err != nil {
 		return nil, router.NewHttpError(err.Error(), 500)
 	}
