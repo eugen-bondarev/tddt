@@ -1,5 +1,7 @@
 # tddt - tiny database dump tool
 
+`tddt` is a tiny web server that gives you an interface to create a dump of your database (PostgreSQL, MySQL) and upload it to the cloud storage of your choice (for now only GCP).
+
 ## Motivation
 
 I wanted a simple Docker-first tool that works anywhere, follows cloud native principles and is easy to deploy.
