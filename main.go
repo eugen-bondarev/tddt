@@ -100,7 +100,7 @@ func main() {
 
 	cfg := util.LoadEnv[config.Config]()
 
-	s, err := storage.NewGCPStorage(cfg.GCPConfig)
+	s, err := storage.New(cfg)
 	util.CheckErr(err)
 
 	app := NewApp(cfg, s)
