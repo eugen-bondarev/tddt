@@ -96,10 +96,11 @@ curl -X POST http://admin:password@localhost:8080/v1/dump \
 
 ## Roadmap
 
+- [x] Upload to S3,
 - [ ] Refactoring for better code structure
 - [ ] Swagger documentation
 - [ ] Encryption
-- [ ] Upload to S3, Azure blob, SFTP and more
+- [ ] Upload to Azure blob, SFTP and more
 - [ ] Support more databases
 - [ ] Better logging
 - [ ] More flexibility through env variables
