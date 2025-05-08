@@ -6,5 +6,6 @@ type Config struct {
 	WithMySQLConfig
 	WithPGConfig
 	WithGCPConfig
+	WithS3Config
 	WithBasicAuthConfig
 }
