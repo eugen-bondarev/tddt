@@ -10,6 +10,11 @@ COPY ./ ./
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o /app-exec ./main.go
 
+# Remove any stale third-party MySQL repo (its signing key expired 2025-10-22)
+RUN rm -f /etc/apt/sources.list.d/mysql.list \
+    /etc/apt/sources.list.d/mysql-apt-config.list \
+    /etc/apt/trusted.gpg.d/mysql.gpg
+
 RUN apt-get update && apt-get install -y lsb-release curl gnupg
 
 # Prepare PostgreSQL 17 (official PGDG repo)
